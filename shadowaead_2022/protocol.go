@@ -90,7 +90,7 @@ func New(method string, pskList [][]byte, timeFunc func() time.Time) (shadowsock
 		ntp:      ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	err1 := s.ntp.UpdateTime()
+	err1 := m.ntp.UpdateTime()
           if err1 != nil {
             // Если произошла ошибка, выводим её в консоль
             log.Record(&log.GeneralMessage{
