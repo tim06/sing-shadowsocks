@@ -15,6 +15,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"fmt"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
@@ -83,7 +84,14 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 		ntp: ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	s.ntp.UpdateTime()
+	err := s.ntp.UpdateTime()
+      if err != nil {
+        // Если произошла ошибка, выводим её в консоль
+        log.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err)
+      } else {
+        // Если ошибки нет, выводим сообщение об успешном выполнении
+        log.Println("Время с NTP сервера успешно обновлено")
+      }
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
