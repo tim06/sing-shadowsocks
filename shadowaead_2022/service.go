@@ -87,10 +87,10 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 	err1 := s.ntp.UpdateTime()
       if err1 != nil {
         // Если произошла ошибка, выводим её в консоль
-        log.Println("Ошибка при обновлении времени с NTP сервера")
+        log.Record("Ошибка при обновлении времени с NTP сервера")
         //fmt.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err1)
       } else {
-        log.Println("Время с NTP сервера успешно обновлено")
+        log.Record("Время с NTP сервера успешно обновлено")
         // Если ошибки нет, выводим сообщение об успешном выполнении
         //fmt.Println("Время с NTP сервера успешно обновлено")
       }
