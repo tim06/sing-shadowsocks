@@ -79,10 +79,10 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 			cache.WithAge[uint64, *serverUDPSession](udpTimeout),
 			cache.WithUpdateAgeOnGet[uint64, *serverUDPSession](),
 		),
-		ntpClient: ntpTime.NewNTPClient("pool.ntp.org"),
+		ntp: ntpTime.NewNTPClient("pool.ntp.org"),
 	}
 
-	s.ntpClient.UpdateTime()
+	s.ntp.UpdateTime()
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
@@ -145,7 +145,7 @@ func (s *Service) time() time.Time {
 	if s.timeFunc != nil {
 		return s.timeFunc()
 	} else {
-		return s.ntpClient.Now()
+		return s.ntp.Now()
 	}
 }
 
