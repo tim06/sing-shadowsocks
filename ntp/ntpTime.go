@@ -41,6 +41,5 @@ func (c *NTPClient) Now() time.Time {
  c.mutex.Lock()
  defer c.mutex.Unlock()
 
- // Возвращаем скорректированное время.
  return c.ntpTime.Add(time.Since(c.ntpTime))
 }

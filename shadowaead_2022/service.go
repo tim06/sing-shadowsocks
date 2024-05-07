@@ -53,6 +53,7 @@ type Service struct {
 	replayFilter replay.Filter
 	udpNat       *udpnat.Service[uint64]
 	udpSessions  *cache.LruCache[uint64, *serverUDPSession]
+	ntp          NTPClient
 }
 
 func NewServiceWithPassword(method string, password string, udpTimeout int64, handler shadowsocks.Handler, timeFunc func() time.Time) (shadowsocks.Service, error) {
@@ -78,7 +79,10 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 			cache.WithAge[uint64, *serverUDPSession](udpTimeout),
 			cache.WithUpdateAgeOnGet[uint64, *serverUDPSession](),
 		),
+		ntpClient := ntpTime.NewNTPClient("pool.ntp.org"),
 	}
+
+	s.ntpClient.UpdateTime()
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
@@ -141,7 +145,7 @@ func (s *Service) time() time.Time {
 	if s.timeFunc != nil {
 		return s.timeFunc()
 	} else {
-		return ntpClient.Now() // time.Now()
+		return s.ntpClient.Now()
 	}
 }
 
