@@ -54,7 +54,7 @@ type Service struct {
 	replayFilter replay.Filter
 	udpNat       *udpnat.Service[uint64]
 	udpSessions  *cache.LruCache[uint64, *serverUDPSession]
-	ntp          ntp.NTPClient
+	ntp          *ntp.NTPClient
 }
 
 func NewServiceWithPassword(method string, password string, udpTimeout int64, handler shadowsocks.Handler, timeFunc func() time.Time) (shadowsocks.Service, error) {
@@ -83,7 +83,10 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 		ntp: ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	s.ntp.UpdateTime()
+	err := s.ntp.UpdateTime()
+      if err != nil {
+        return nil, err
+      }
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
