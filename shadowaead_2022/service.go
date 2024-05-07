@@ -14,7 +14,7 @@ import (
 	"os"
 	"sync"
 	"sync/atomic"
-	"ntpTime"
+	"shadowaead_2022/ntpTime"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/shadowaead"
