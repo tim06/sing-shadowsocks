@@ -84,8 +84,8 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 		ntp: ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	err := s.ntp.UpdateTime()
-      if err != nil {
+	err1 := s.ntp.UpdateTime()
+      if err1 != nil {
         // Если произошла ошибка, выводим её в консоль
         fmt.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err)
       } else {
