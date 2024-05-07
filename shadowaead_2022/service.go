@@ -15,6 +15,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+	"fmt"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
@@ -86,10 +87,10 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 	err := s.ntp.UpdateTime()
       if err != nil {
         // Если произошла ошибка, выводим её в консоль
-        log.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err)
+        fmt.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err)
       } else {
         // Если ошибки нет, выводим сообщение об успешном выполнении
-        log.Println("Время с NTP сервера успешно обновлено")
+        fmt.Println("Время с NTP сервера успешно обновлено")
       }
 
 	switch method {
