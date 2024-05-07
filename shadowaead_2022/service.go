@@ -14,6 +14,7 @@ import (
 	"os"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
@@ -53,7 +54,7 @@ type Service struct {
 	replayFilter replay.Filter
 	udpNat       *udpnat.Service[uint64]
 	udpSessions  *cache.LruCache[uint64, *serverUDPSession]
-	ntp          NTPClient
+	ntp          ntp.NTPClient
 }
 
 func NewServiceWithPassword(method string, password string, udpTimeout int64, handler shadowsocks.Handler, timeFunc func() time.Time) (shadowsocks.Service, error) {
