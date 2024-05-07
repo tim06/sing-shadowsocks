@@ -9,6 +9,8 @@ require (
 )
 
 require (
+	github.com/beevik/ntp v1.4.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.12 // indirect
+	golang.org/x/net v0.25.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 )

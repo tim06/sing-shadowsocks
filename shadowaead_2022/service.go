@@ -14,7 +14,7 @@ import (
 	"os"
 	"sync"
 	"sync/atomic"
-	"time"
+	"ntpTime"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/shadowaead"
@@ -141,7 +141,7 @@ func (s *Service) time() time.Time {
 	if s.timeFunc != nil {
 		return s.timeFunc()
 	} else {
-		return time.Now()
+		return ntpClient.Now() // time.Now()
 	}
 }
 
