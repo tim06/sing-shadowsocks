@@ -83,10 +83,7 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 		ntp: ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	err := s.ntp.UpdateTime()
-      if err != nil {
-        return nil, err
-      }
+	s.ntp.UpdateTime()
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
