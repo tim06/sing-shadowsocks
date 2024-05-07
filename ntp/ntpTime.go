@@ -1,4 +1,4 @@
-package shadowaead_2022
+package ntp
 
 import (
  "github.com/beevik/ntp"
