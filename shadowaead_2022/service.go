@@ -14,10 +14,10 @@ import (
 	"os"
 	"sync"
 	"sync/atomic"
-	"shadowaead_2022/ntpTime"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/shadowaead"
+	"github.com/sagernet/sing-shadowsocks/shadowaead_2022"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/buf"
 	"github.com/sagernet/sing/common/cache"
