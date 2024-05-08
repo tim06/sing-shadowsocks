@@ -19,7 +19,6 @@ import (
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
 	"github.com/sagernet/sing-shadowsocks/shadowaead"
-	"github.com/xtls/xray-core/common/log"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/buf"
 	"github.com/sagernet/sing/common/cache"
