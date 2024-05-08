@@ -243,13 +243,13 @@ func (m *Method) time() time.Time {
 	if m.timeFunc != nil {
 	                    log.Record(&log.GeneralMessage{
                     		Severity: log.Severity_Error,
-                    		Content:  "Вызов time() timeFunc: " + m.timeFunc(),
+                    		Content:  "Вызов time() timeFunc: %s", m.ntp.Now(),
                     	})
 		return m.timeFunc()
 	} else {
 	    log.Record(&log.GeneralMessage{
                 Severity: log.Severity_Error,
-                Content:  "Вызов time() ntp: " + m.ntp.Now(),
+                Content:  "Вызов time() ntp: %s", m.ntp.Now(),
             })
 		return m.ntp.Now()
 	}
