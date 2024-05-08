@@ -91,18 +91,18 @@ func New(method string, pskList [][]byte, timeFunc func() time.Time) (shadowsock
 		ntp:      ntp.NewNTPClient("pool.ntp.org"),
 	}
 
-	err1 := m.ntp.UpdateTime()
-          if err1 != nil {
-            log.Record(&log.GeneralMessage{
-            		Severity: log.Severity_Error,
-            		Content:  "Ошибка при обновлении времени с NTP сервера",
-            	})
-          } else {
-          log.Record(&log.GeneralMessage{
-                  		Severity: log.Severity_Error,
-                  		Content:  "Время с NTP сервера успешно обновлено",
-                  	})
-          }
+// 	err1 := m.ntp.UpdateTime()
+//           if err1 != nil {
+//             log.Record(&log.GeneralMessage{
+//             		Severity: log.Severity_Error,
+//             		Content:  "Ошибка при обновлении времени с NTP сервера",
+//             	})
+//           } else {
+//           log.Record(&log.GeneralMessage{
+//                   		Severity: log.Severity_Error,
+//                   		Content:  "Время с NTP сервера успешно обновлено",
+//                   	})
+//           }
 
 	switch method {
 	case "2022-blake3-aes-128-gcm":
