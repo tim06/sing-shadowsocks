@@ -92,19 +92,15 @@ func New(method string, pskList [][]byte, timeFunc func() time.Time) (shadowsock
 
 	err1 := m.ntp.UpdateTime()
           if err1 != nil {
-            // Если произошла ошибка, выводим её в консоль
             log.Record(&log.GeneralMessage{
             		Severity: log.Severity_Error,
             		Content:  "Ошибка при обновлении времени с NTP сервера",
             	})
-            //fmt.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err1)
           } else {
           log.Record(&log.GeneralMessage{
                   		Severity: log.Severity_Error,
                   		Content:  "Время с NTP сервера успешно обновлено",
                   	})
-            // Если ошибки нет, выводим сообщение об успешном выполнении
-            //fmt.Println("Время с NTP сервера успешно обновлено")
           }
 
 	switch method {
@@ -245,8 +241,16 @@ type clientConn struct {
 
 func (m *Method) time() time.Time {
 	if m.timeFunc != nil {
+	                    log.Record(&log.GeneralMessage{
+                    		Severity: log.Severity_Error,
+                    		Content:  "Вызов time() timeFunc: " + m.timeFunc(),
+                    	})
 		return m.timeFunc()
 	} else {
+	    log.Record(&log.GeneralMessage{
+                Severity: log.Severity_Error,
+                Content:  "Вызов time() ntp: " + m.ntp.Now(),
+            })
 		return m.ntp.Now()
 	}
 }
