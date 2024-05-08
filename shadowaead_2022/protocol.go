@@ -16,6 +16,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
+	"ftm"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
@@ -243,13 +244,13 @@ func (m *Method) time() time.Time {
 	if m.timeFunc != nil {
 	                    log.Record(&log.GeneralMessage{
                     		Severity: log.Severity_Error,
-                    		Content:  "Вызов time() timeFunc: %s", m.ntp.Now(),
+                    		Content:  fmt.Sprintf("Вызов time() timeFunc: %s", m.ntp.Now()),
                     	})
 		return m.timeFunc()
 	} else {
 	    log.Record(&log.GeneralMessage{
                 Severity: log.Severity_Error,
-                Content:  "Вызов time() ntp: %s", m.ntp.Now(),
+                Content:  fmt.Sprintf("Вызов time() ntp: %s", m.ntp.Now()),
             })
 		return m.ntp.Now()
 	}
