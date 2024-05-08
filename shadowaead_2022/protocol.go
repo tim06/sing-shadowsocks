@@ -16,7 +16,7 @@ import (
 	"strings"
 	"sync/atomic"
 	"time"
-	"ftm"
+	"fmt"
 
 	"github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/ntp"
