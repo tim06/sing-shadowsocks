@@ -7,19 +7,25 @@ import (
 )
 
 type NTPClient struct {
- ntpServer string
- mutex     sync.Mutex
- ntpTime   time.Time
+ ntpServer   string
+ offset      time.Duration
+ mutex       sync.Mutex
+ lastSynced  time.Time
 }
 
-func NewNTPClient(ntpServer string) *NTPClient {
- return &NTPClient{
+func NewNTPClient(ntpServer string) (*NTPClient, error) {
+ client := &NTPClient{
   ntpServer: ntpServer,
-  ntpTime:   time.Now(),
  }
+
+ if err := client.syncTime(); err != nil {
+  return nil, err
+ }
+
+ return client, nil
 }
 
-func (c *NTPClient) UpdateTime() error {
+func (c *NTPClient) syncTime() error {
  c.mutex.Lock()
  defer c.mutex.Unlock()
 
@@ -33,7 +39,9 @@ func (c *NTPClient) UpdateTime() error {
   return err
  }
 
- c.ntpTime = time.Now().Add(response.ClockOffset)
+ c.offset = response.ClockOffset
+ c.lastSynced = time.Now()
+
  return nil
 }
 
@@ -41,5 +49,5 @@ func (c *NTPClient) Now() time.Time {
  c.mutex.Lock()
  defer c.mutex.Unlock()
 
- return c.ntpTime.Add(time.Since(c.ntpTime))
+ return time.Now().Add(c.offset)
 }
