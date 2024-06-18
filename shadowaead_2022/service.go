@@ -80,26 +80,9 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 			cache.WithAge[uint64, *serverUDPSession](udpTimeout),
 			cache.WithUpdateAgeOnGet[uint64, *serverUDPSession](),
 		),
-		ntp: ntp.NewNTPClient("pool.ntp.org"),
+		ntp: ntp.NewNTPClient("pool.ntp.org", "time.google.com", "time.windows.com"),
 	}
-
-// 	err1 := s.ntp.UpdateTime()
-//       if err1 != nil {
-//         // Если произошла ошибка, выводим её в консоль
-//         log.Record(&log.GeneralMessage{
-//         		Severity: log.Severity_Error,
-//         		Content:  "Ошибка при обновлении времени с NTP сервера",
-//         	})
-//         //fmt.Printf("Ошибка при обновлении времени с NTP сервера: %v\n", err1)
-//       } else {
-//       log.Record(&log.GeneralMessage{
-//               		Severity: log.Severity_Error,
-//               		Content:  "Время с NTP сервера успешно обновлено",
-//               	})
-//         // Если ошибки нет, выводим сообщение об успешном выполнении
-//         //fmt.Println("Время с NTP сервера успешно обновлено")
-//       }
-
+	
 	switch method {
 	case "2022-blake3-aes-128-gcm":
 		s.keySaltLength = 16
