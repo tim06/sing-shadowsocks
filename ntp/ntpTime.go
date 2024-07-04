@@ -2,7 +2,6 @@ package ntp
 
 import (
     "github.com/beevik/ntp"
-    "fmt"
     "sync"
     "sync/atomic"
     "time"
@@ -31,23 +30,19 @@ func (c *NTPClient) UpdateTime() {
     for _, server := range c.ntpServers {
         response, err := ntp.Query(server)
         if err != nil {
-            fmt.Sprintf("Error querying NTP server %s: %v", server, err)
             continue
         }
         err = response.Validate()
         if err != nil {
-            fmt.Sprintf("Validation error from NTP server %s: %v", server, err)
             continue
         }
         c.offset = response.ClockOffset
         c.lastSynced = time.Now()
         c.synced.Store(true)
-        fmt.Sprintf("Time synchronized with NTP server %s", server)
         return
     }
 
     c.synced.Store(false)
-    fmt.Sprintf("Failed to synchronize time with all provided NTP servers")
 }
 
 func (c *NTPClient) Now() time.Time {
