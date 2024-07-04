@@ -87,7 +87,7 @@ func New(method string, pskList [][]byte, timeFunc func() time.Time) (shadowsock
 	m := &Method{
 		name:     method,
 		timeFunc: timeFunc,
-		ntp:      ntp.NewNTPClient("pool.ntp.org", "time.google.com", "time.windows.com"),
+		ntp:      ntp.NewNTPClient("time.google.com", "time.windows.com", "pool.ntp.org"),
 	}
 
 	switch method {

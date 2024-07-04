@@ -80,7 +80,7 @@ func NewService(method string, psk []byte, udpTimeout int64, handler shadowsocks
 			cache.WithAge[uint64, *serverUDPSession](udpTimeout),
 			cache.WithUpdateAgeOnGet[uint64, *serverUDPSession](),
 		),
-		ntp: ntp.NewNTPClient("pool.ntp.org", "time.google.com", "time.windows.com"),
+		ntp: ntp.NewNTPClient("time.google.com", "time.windows.com", "pool.ntp.org"),
 	}
 	
 	switch method {
