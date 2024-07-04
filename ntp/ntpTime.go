@@ -2,7 +2,6 @@ package ntp
 
 import (
     "github.com/beevik/ntp"
-    "github.com/xtls/xray-core/common/log"
     "fmt"
     "sync"
     "sync/atomic"
@@ -32,40 +31,28 @@ func (c *NTPClient) UpdateTime() {
     for _, server := range c.ntpServers {
         response, err := ntp.Query(server)
         if err != nil {
-            log.Record(&log.GeneralMessage{
-                    		Severity: log.Severity_Error,
-                    		Content:  fmt.Sprintf("Error querying NTP server %s: %v", server, err),
-                    	})
+            fmt.Sprintf("Error querying NTP server %s: %v", server, err)
             continue
         }
         err = response.Validate()
         if err != nil {
-            log.Record(&log.GeneralMessage{
-                    		Severity: log.Severity_Error,
-                    		Content:  fmt.Sprintf("Validation error from NTP server %s: %v", server, err),
-                    	})
+            fmt.Sprintf("Validation error from NTP server %s: %v", server, err)
             continue
         }
         c.offset = response.ClockOffset
         c.lastSynced = time.Now()
         c.synced.Store(true)
-        log.Record(&log.GeneralMessage{
-                    		Severity: log.Severity_Error,
-                    		Content:  fmt.Sprintf("Time synchronized with NTP server %s", server),
-                    	})
+        fmt.Sprintf("Time synchronized with NTP server %s", server)
         return
     }
 
     c.synced.Store(false)
-    log.Record(&log.GeneralMessage{
-                    		Severity: log.Severity_Error,
-                    		Content:  fmt.Sprintf("Failed to synchronize time with all provided NTP servers"),
-                    	})
+    fmt.Sprintf("Failed to synchronize time with all provided NTP servers")
 }
 
 func (c *NTPClient) Now() time.Time {
     if !c.synced.Load() {
-        go c.UpdateTime() // Запуск UpdateTime в другом потоке, если еще не синхронизировано
+        go c.UpdateTime()
         if !c.synced.Load() {
             return time.Now()
         }
