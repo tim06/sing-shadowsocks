@@ -23,7 +23,6 @@ import (
 	"github.com/sagernet/sing-shadowsocks/shadowaead"
 	"github.com/sagernet/sing/common"
 	"github.com/sagernet/sing/common/buf"
-	"github.com/xtls/xray-core/common/log"
 	"github.com/sagernet/sing/common/bufio"
 	E "github.com/sagernet/sing/common/exceptions"
 	M "github.com/sagernet/sing/common/metadata"
@@ -229,16 +228,10 @@ type clientConn struct {
 
 func (m *Method) time() time.Time {
 	if m.timeFunc != nil {
-	                    log.Record(&log.GeneralMessage{
-                    		Severity: log.Severity_Error,
-                    		Content:  fmt.Sprintf("Вызов time() timeFunc: %s", m.ntp.Now()),
-                    	})
+		fmt.Sprintf("Вызов time() timeFunc: %s", m.ntp.Now())
 		return m.timeFunc()
 	} else {
-	    log.Record(&log.GeneralMessage{
-                Severity: log.Severity_Error,
-                Content:  fmt.Sprintf("Вызов time() ntp: %s", m.ntp.Now()),
-            })
+		fmt.Sprintf("Вызов time() ntp: %s", m.ntp.Now())
 		return m.ntp.Now()
 	}
 }
