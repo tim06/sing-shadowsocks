@@ -1,6 +1,7 @@
 package ntp
 
 import (
+    "fmt"
     "github.com/beevik/ntp"
     "log"
     "sync"
@@ -25,36 +26,42 @@ func NewNTPClient(ntpServers ...string) *NTPClient {
     return client
 }
 
-func (c *NTPClient) UpdateTime() {
+func (c *NTPClient) UpdateTime() error {
     c.mutex.Lock()
     defer c.mutex.Unlock()
 
     if c.syncAttemptsDone.Load() {
-        return
+        return nil
     }
 
+    var wg sync.WaitGroup
     for _, server := range c.ntpServers {
-        response, err := ntp.Query(server)
-        if err != nil {
-            log.Printf("Error querying NTP server %s: %v", server, err)
-            continue
-        }
-        err = response.Validate()
-        if err != nil {
-            log.Printf("Validation error from NTP server %s: %v", server, err)
-            continue
-        }
-        c.offset = response.ClockOffset
-        c.lastSynced = time.Now()
-        c.synced.Store(true)
-        c.syncAttemptsDone.Store(true)
-        log.Printf("Time synchronized with NTP server %s", server)
-        return
+        wg.Add(1)
+        go func(server string) {
+            defer wg.Done()
+            response, err := ntp.Query(server)
+            if err != nil {
+                log.Printf("Error querying NTP server %s: %v", server, err)
+                return
+            }
+            err = response.Validate()
+            if err != nil {
+                log.Printf("Validation error from NTP server %s: %v", server, err)
+                return
+            }
+            c.offset = response.ClockOffset
+            c.lastSynced = time.Now()
+            c.synced.Store(true)
+            c.syncAttemptsDone.Store(true)
+            log.Printf("Time synchronized with NTP server %s", server)
+        }(server)
     }
+    wg.Wait()
 
-    c.synced.Store(false)
-    c.syncAttemptsDone.Store(true)
-    log.Println("Failed to synchronize time with all provided NTP servers")
+    if !c.synced.Load() {
+        return fmt.Errorf("failed to synchronize time with all provided NTP servers")
+    }
+    return nil
 }
 
 func (c *NTPClient) Now() time.Time {
@@ -64,9 +71,6 @@ func (c *NTPClient) Now() time.Time {
             return time.Now()
         }
     }
-
-    c.mutex.Lock()
-    defer c.mutex.Unlock()
 
     return time.Now().Add(c.offset)
 }
